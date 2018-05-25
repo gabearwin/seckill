@@ -5,7 +5,7 @@
 
 <mapper namespace="xyz.gabear.dao.SuccessKilledDao">
 
-    <!--通过ignore关键字将主键冲突时的报错改为返回0；没有ignore会直接报错-->
+    <!--一个技巧：通过ignore关键字将主键冲突时的报错改为返回0；没有ignore发生冲突时会直接报错-->
     <!--int insertSuccessKilled(long seckilledId,long userPhone);-->
     <update id="insertSuccessKilled">
         INSERT ignore INTO success_killed (seckill_id, user_phone, state) VALUES (#{seckilledId}, #{userPhone}, 1)

@@ -5,7 +5,7 @@
 <configuration>
     <!--配置MyBatis全局属性-->
     <settings>
-        <!--使用jdbc的getGeneratekeys获取自增主键值，默认false-->
+        <!--使用jdbc的getGeneratekeys获取数据库自增主键值，默认false-->
         <setting name="useGeneratedKeys" value="true"/>
 
         <!--使用列别名替换别名　　默认true
@@ -19,5 +19,6 @@
 
         <setting name="logImpl" value="SLF4J"/>
     </settings>
+
 
 </configuration>
