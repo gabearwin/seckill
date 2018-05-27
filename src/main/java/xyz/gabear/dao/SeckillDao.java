@@ -1,5 +1,6 @@
 package xyz.gabear.dao;
 
+import org.apache.ibatis.annotations.Param;
 import xyz.gabear.entity.Seckill;
 
 import java.util.Date;
@@ -13,7 +14,7 @@ public interface SeckillDao {
      * @param killTime  秒杀时间，从前台传过来的
      * @return 影响的行数
      */
-    int reduceNumber(long seckillId, Date killTime);
+    int reduceNumber(@Param("seckillId") long seckillId, @Param("killTime") Date killTime);
 
     /**
      * 根据id查询秒杀商品对象
@@ -25,11 +26,13 @@ public interface SeckillDao {
 
     /**
      * 根据偏移量查询秒杀商品列表
+     * <p>
+     * 注意：这里因为Java都是形参传递，所以用MyBatis的注解来指定参数名字
      *
-     * @param offset
-     * @param limit
+     * @param offset 偏移量
+     * @param limit  取多少条
      * @return
      */
-    List<Seckill> queryAll(int offset, int limit);
+    List<Seckill> queryAll(@Param("offset") int offset, @Param("limit") int limit);
 
 }

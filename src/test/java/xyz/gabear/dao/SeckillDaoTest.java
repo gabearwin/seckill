@@ -7,15 +7,15 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import xyz.gabear.entity.Seckill;
 
 import javax.annotation.Resource;
-
-import static org.junit.Assert.*;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 配置spring和junit整合，junit启动时加载springIOC容器
  * spring-test,junit
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-//告诉junit我的spring配置文件在哪
+//告诉junit我的spring需要哪些配置文件
 @ContextConfiguration({"classpath:spring/spring-dao.xml"})
 public class SeckillDaoTest {
 
@@ -25,6 +25,9 @@ public class SeckillDaoTest {
 
     @Test
     public void reduceNumber() {
+        Date date = new Date();
+        int updateCount = seckillDao.reduceNumber(1000L, date);
+        System.out.println("updateCount = " + updateCount);
     }
 
     @Test
@@ -37,5 +40,9 @@ public class SeckillDaoTest {
 
     @Test
     public void queryAll() {
+        List<Seckill> seckills = seckillDao.queryAll(0, 100);
+        for (Seckill seckill : seckills) {
+            System.out.println(seckill);
+        }
     }
 }
