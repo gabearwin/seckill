@@ -1,5 +1,5 @@
 package xyz.gabear.dto;
-//DTO就是方便web层或者接口使用方和服务层数据传输
+//DTO就是方便web层或者接口使用方和service服务层数据传输
 
 /**
  * 暴露秒杀地址DTO
