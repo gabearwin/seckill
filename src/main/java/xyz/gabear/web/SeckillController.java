@@ -40,10 +40,10 @@ public class SeckillController {
     }
 
     @RequestMapping(value = "/{seckillId}/detail", method = RequestMethod.GET)
-    public String detail(@PathVariable("seckillId") long seckillId, Model model) {
-        /*if (seckillId == null) {
+    public String detail(@PathVariable("seckillId") Long seckillId, Model model) {
+        if (seckillId == null) {
             return "redirect:/seckill/list";
-        }*/
+        }
         Seckill seckill = seckillService.getById(seckillId);
         if (seckill == null) {
             return "forward:/seckill/list";
@@ -55,7 +55,7 @@ public class SeckillController {
     // ajax json
     @RequestMapping(value = "/{seckillId}/exposer",
             method = RequestMethod.POST,
-            produces = {"application/json", "charset=utf-8"})
+            produces = "application/json;charset=UTF-8")
     @ResponseBody
     public SeckillResult<Exposer> exposer(long seckillId) {
         SeckillResult<Exposer> result;
@@ -71,12 +71,12 @@ public class SeckillController {
 
     @RequestMapping(value = "/{seckillId}/{md5}/execution",
             method = RequestMethod.POST,
-            produces = {"application/json", "charset=utf-8"})
+            produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public SeckillResult<SeckillExecution> execute(@PathVariable("seckillId") long seckillId,
+    public SeckillResult<SeckillExecution> execute(@PathVariable("seckillId") Long seckillId,
                                                    @PathVariable("md5") String md5,
-                                                   @CookieValue(value = "killPhone", required = false) long userPhone) {
-        if (null == (Long) userPhone) {
+                                                   @CookieValue(value = "killPhone", required = false) Long userPhone) {
+        if (null == userPhone) {
             return new SeckillResult<>(false, "用户未注册");
 
         }

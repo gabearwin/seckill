@@ -1,7 +1,7 @@
 package xyz.gabear.dto;
 
 /**
- * 用来所有ajax请求结果的封装，变成json
+ * 用来方便将所有ajax请求的结果封装成json
  * Created by xiong on 2018/5/28.
  */
 public class SeckillResult<T> {

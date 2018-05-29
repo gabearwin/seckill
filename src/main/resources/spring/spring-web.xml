@@ -27,7 +27,7 @@
         <!--这样就可以使用el表达式等-->
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
         <!--所有的页面都在这个路径下-->
-        <property name="prefix" value="/WEB-INF/jsp"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
         <!--返回的view都是jsp页面-->
         <property name="suffix" value=".jsp"/>
     </bean>
