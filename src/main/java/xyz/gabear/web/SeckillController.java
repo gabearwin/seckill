@@ -57,7 +57,7 @@ public class SeckillController {
             method = RequestMethod.POST,
             produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public SeckillResult<Exposer> exposer(long seckillId) {
+    public SeckillResult<Exposer> exposer(@PathVariable("seckillId") Long seckillId) {
         SeckillResult<Exposer> result;
         try {
             Exposer exposer = seckillService.exportSeckillUrl(seckillId);
@@ -86,18 +86,19 @@ public class SeckillController {
             return new SeckillResult<>(true, execution);
         } catch (RepeatKillException e) {
             SeckillExecution execution = new SeckillExecution(seckillId, SeckillStateEnum.REPEAT_KILL);
-            return new SeckillResult<>(false, execution);
+            return new SeckillResult<>(true, execution);
         } catch (SeckillCloseException e) {
             SeckillExecution execution = new SeckillExecution(seckillId, SeckillStateEnum.END);
-            return new SeckillResult<>(false, execution);
+            return new SeckillResult<>(true, execution);
         } catch (SeckillException e) {
             logger.error(e.getMessage(), e);
             SeckillExecution execution = new SeckillExecution(seckillId, SeckillStateEnum.INNER_ERROR);
-            return new SeckillResult<>(false, execution);
+            return new SeckillResult<>(true, execution);
         }
     }
 
     @RequestMapping(value = "/time/now", method = RequestMethod.GET)
+    @ResponseBody
     public SeckillResult<Long> time() {
         Date now = new Date();
         return new SeckillResult<>(true, now.getTime());
