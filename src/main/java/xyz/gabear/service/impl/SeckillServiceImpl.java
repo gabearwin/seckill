@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import xyz.gabear.dao.SeckillDao;
 import xyz.gabear.dao.SuccessKilledDao;
+import xyz.gabear.dao.cache.RedisDao;
 import xyz.gabear.dto.Exposer;
 import xyz.gabear.dto.SeckillExecution;
 import xyz.gabear.entity.Seckill;
@@ -35,8 +36,12 @@ public class SeckillServiceImpl implements SeckillService {
     @Autowired
     private SuccessKilledDao successKilledDao;
 
+    @Autowired
+    private RedisDao redisDao;
+
     // MD5盐值字符串，用于混淆MD5
     private final String slat = "xionggaoxiong2018";
+    private Seckill seckill;
 
     @Override
     public List<Seckill> getSeckillList() {
@@ -50,11 +55,25 @@ public class SeckillServiceImpl implements SeckillService {
 
     @Override
     public Exposer exportSeckillUrl(long seckillId) {
-        Seckill seckill = seckillDao.queryById(seckillId);
-        // 不存在这种秒杀商品
-        if (seckill == null) {
-            return new Exposer(false, seckillId);
+        /**
+         * Seckill seckill = seckillDao.queryById(seckillId);
+         * 通过id查询秒杀商品，用户可能在某个秒杀页面一直刷新，这样就会一直发起请求。
+         * 但是这件秒杀商品的属性是固定不变的，所以可以把这个商品实体存放到服务器redis缓存中。
+         * 这就是我们进行优化的一个点。
+         */
+        // 1.访问redis
+        Seckill seckill = redisDao.getSeckill(seckillId);
+        if (seckill != null) {
+            // 2.访问数据库
+            seckill = seckillDao.queryById(seckillId);
+            if (seckill == null) {
+                return new Exposer(false, seckillId);
+            } else {
+                // 3.放入redis
+                redisDao.putSeckill(seckill);
+            }
         }
+
         Date startTime = seckill.getStartTime();
         Date endTime = seckill.getEndTime();
         // 系统当前时间
@@ -83,26 +102,26 @@ public class SeckillServiceImpl implements SeckillService {
     @Override
     @Transactional
     public SeckillExecution executeSeckill(long seckillId, long userPhone, String md5)
-            throws SeckillException, RepeatKillException, SeckillCloseException {
+            throws RepeatKillException, SeckillCloseException, SeckillException {
         if (md5 == null || !md5.equals(getMD5(seckillId))) {
             throw new SeckillException("seckill data rewrite");
         }
         // 执行秒杀逻辑：减库存+记录购买行为
         Date nowTime = new Date();
         try {
-            int updateCount = seckillDao.reduceNumber(seckillId, nowTime);
-            if (updateCount <= 0) {
-                // 减库存失败，可能是秒杀时间结束了，也可能是商品被抢完了
-                throw new SeckillCloseException("seckill is closed");
+            // 减库存，记录购买行为
+            int insertCount = successKilledDao.insertSuccessKilled(seckillId, userPhone);
+            // seckillId,userPhone联合唯一主键
+            if (insertCount <= 0) {
+                // 重复秒杀
+                throw new RepeatKillException("seckill repeated");
             } else {
-                // 减库存成功，记录购买行为
-                int insertCount = successKilledDao.insertSuccessKilled(seckillId, userPhone);
-                // seckillId,userPhone联合唯一主键
-                if (insertCount <= 0) {
-                    // 重复秒杀
-                    throw new RepeatKillException("seckill repeated");
+                int updateCount = seckillDao.reduceNumber(seckillId, nowTime);
+                if (updateCount <= 0) {
+                    // 减库存失败，可能是秒杀时间结束了，也可能是商品被抢完了。热点商品竞争。rollback
+                    throw new SeckillCloseException("seckill is closed");
                 } else {
-                    // 秒杀成功
+                    // 秒杀成功。commit
                     SuccessKilled successKilled = successKilledDao.queryByIdWithSeckill(seckillId, userPhone);
                     return new SeckillExecution(seckillId, SeckillStateEnum.SUCCESS, successKilled);
                 }

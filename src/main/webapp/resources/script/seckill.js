@@ -4,9 +4,9 @@
 
 /**
  * JavaScript模块化
- * @type {{URL: {}, validatePhone: seckill.validatePhone, detail: {init: seckill.detail.init}}}
  */
-var seckill = {
+var seckill;
+seckill = {
     // 封装秒杀相关ajax的URL
     URL: {
         now: function () {
@@ -133,4 +133,4 @@ var seckill = {
             }
         }
     }
-}
+};

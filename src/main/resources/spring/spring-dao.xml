@@ -7,6 +7,7 @@
     <!-- 配置整合mybatis过程 -->
     <!-- 1：配置数据库相关参数 properties的属性可以用 ${url} -->
     <context:property-placeholder location="classpath:jdbc.properties"/>
+
     <!-- 2:数据库连接池 -->
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <!-- 配置连接池属性 -->
@@ -41,11 +42,18 @@
         <!-- 扫描sql配置文件：mapper需要的xml文件 -->
         <property name="mapperLocations" value="classpath:mapper/*.xml"/>
     </bean>
+
     <!-- 4：配置扫描DAO接口包，动态实现DAO接口，注入到spring容器中 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <!-- 注入SqlSessionFactory -->
         <property name="sqlSessionFactoryBeanName" value="SqlSessionFactory"/>
         <!-- 给出需要扫描DAO接口包 -->
         <property name="basePackage" value="xyz.gabear.dao"/>
+    </bean>
+
+    <!--RedisDao-->
+    <bean id="redisDao" class="xyz.gabear.dao.cache.RedisDao">
+        <constructor-arg index="0" value="localhost"/>
+        <constructor-arg index="1" value="6379"/>
     </bean>
 </beans>
