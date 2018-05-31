@@ -45,4 +45,29 @@
         ORDER BY create_time DESC
         limit #{offset}, #{limit}
     </select>
+
+    <!--MyBatis调用存储过程-->
+    <select id="killByProcedure" statementType="CALLABLE">
+        call seckill.execute_seckill(
+                #{seckillId,jdbcType=BIGINT,mode=IN},
+                #{phone,jdbcType=BIGINT,mode=IN},
+                #{killTime,jdbcType=TIMESTAMP,mode=IN},
+                #{result,jdbcType=INTEGER,mode=OUT}
+        )
+    </select>
+
+    <!--todo-->
+    <!--List<Seckill> queryByEntity(Seckill seckill);-->
+    <select id="queryByEntity" resultType="Seckill">
+        SELECT
+            seckill_id,
+            name,
+            number,
+            start_time,
+            end_time,
+            create_time
+        FROM seckill
+        ORDER BY create_time DESC
+        limit #{offset}, #{limit}
+    </select>
 </mapper>

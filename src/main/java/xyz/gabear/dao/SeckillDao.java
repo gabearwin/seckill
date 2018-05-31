@@ -5,6 +5,7 @@ import xyz.gabear.entity.Seckill;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface SeckillDao {
     /**
@@ -34,5 +35,20 @@ public interface SeckillDao {
      * @return
      */
     List<Seckill> queryAll(@Param("offset") int offset, @Param("limit") int limit);
+
+    /**
+     * 使用存储过程执行秒杀
+     *
+     * @param paramMap
+     */
+    void killByProcedure(Map<String, Object> paramMap);
+
+    /**
+     * 根据前端传来的参数自动映射到seckill实体中，根据条件查询
+     *
+     * @param seckill
+     * @return
+     */
+    List<Seckill> queryByEntity(Seckill seckill);
 
 }

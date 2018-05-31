@@ -18,6 +18,7 @@ import xyz.gabear.service.SeckillService;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by xiong on 2018/5/28.
@@ -25,7 +26,7 @@ import java.util.List;
 @Controller // @Service @Component
 @RequestMapping("/seckill")
 public class SeckillController {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(SeckillController.class);
 
     @Autowired
     private SeckillService seckillService;
@@ -78,7 +79,6 @@ public class SeckillController {
                                                    @CookieValue(value = "killPhone", required = false) Long userPhone) {
         if (null == userPhone) {
             return new SeckillResult<>(false, "用户未注册");
-
         }
         SeckillResult<SeckillExecution> result;
         try {
@@ -103,4 +103,18 @@ public class SeckillController {
         Date now = new Date();
         return new SeckillResult<>(true, now.getTime());
     }
+
+    @RequestMapping("/params")
+    public String test( Map<String, String> map) {
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if(entry.getValue().charAt(0)=='!'){
+                entry.setValue(entry.getValue().substring(1,entry.getValue().length()));
+            }
+            System.out.println("key is " + entry.getKey() + " and value is " + entry.getValue());
+            // logger.error("=================================key is {}, and value is {}==========================", entry.getKey(), entry.getValue());
+            // System.out.println("ajskdfjskladjfksajk");
+        }
+        return "hello";
+    }
+
 }

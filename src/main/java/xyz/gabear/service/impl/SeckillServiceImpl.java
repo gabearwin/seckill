@@ -106,7 +106,7 @@ public class SeckillServiceImpl implements SeckillService {
         if (md5 == null || !md5.equals(getMD5(seckillId))) {
             throw new SeckillException("seckill data rewrite");
         }
-        // 执行秒杀逻辑：减库存+记录购买行为
+        // 执行秒杀逻辑：减库存+记录购买行为。注意这个顺序也是优化点。
         Date nowTime = new Date();
         try {
             // 减库存，记录购买行为
@@ -138,6 +138,11 @@ public class SeckillServiceImpl implements SeckillService {
 
     }
 
+    @Override
+    public SeckillExecution executeSeckillByProcedure(long seckillId, long userPhone, String md5) {
+        // if(md5==null)
+        return null;// TODO: 2018/5/31
+    }
     /**
      * 使用注解控制事务方法的优点：
      * 1.开发团队达成一致约定，明确标注事务方法的编程风格
