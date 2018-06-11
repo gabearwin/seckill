@@ -43,12 +43,4 @@ public interface SeckillDao {
      */
     void killByProcedure(Map<String, Object> paramMap);
 
-    /**
-     * 根据前端传来的参数自动映射到seckill实体中，根据条件查询
-     *
-     * @param seckill
-     * @return
-     */
-    List<Seckill> queryByEntity(Seckill seckill);
-
 }

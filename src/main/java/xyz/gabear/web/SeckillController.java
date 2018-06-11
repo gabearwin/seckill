@@ -18,7 +18,6 @@ import xyz.gabear.service.SeckillService;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by xiong on 2018/5/28.
@@ -83,6 +82,8 @@ public class SeckillController {
         SeckillResult<SeckillExecution> result;
         try {
             SeckillExecution execution = seckillService.executeSeckill(seckillId, userPhone, md5);
+            // 下面这一句是通过调用存储过程执行秒杀
+            // SeckillExecution execution = seckillService.executeSeckillByProcedure(seckillId, userPhone, md5);
             return new SeckillResult<>(true, execution);
         } catch (RepeatKillException e) {
             SeckillExecution execution = new SeckillExecution(seckillId, SeckillStateEnum.REPEAT_KILL);
@@ -102,19 +103,6 @@ public class SeckillController {
     public SeckillResult<Long> time() {
         Date now = new Date();
         return new SeckillResult<>(true, now.getTime());
-    }
-
-    @RequestMapping("/params")
-    public String test( Map<String, String> map) {
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            if(entry.getValue().charAt(0)=='!'){
-                entry.setValue(entry.getValue().substring(1,entry.getValue().length()));
-            }
-            System.out.println("key is " + entry.getKey() + " and value is " + entry.getValue());
-            // logger.error("=================================key is {}, and value is {}==========================", entry.getKey(), entry.getValue());
-            // System.out.println("ajskdfjskladjfksajk");
-        }
-        return "hello";
     }
 
 }

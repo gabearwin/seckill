@@ -16,8 +16,6 @@ import xyz.gabear.exception.SeckillException;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by xiong on 2018/5/28.
  */
@@ -93,6 +91,18 @@ public class SeckillServiceTest {
         } else {
             // 秒杀未开启
             logger.info("exposer={}", exposer);
+        }
+    }
+
+    @Test
+    public void executeSeckillByProcedure() {
+        long seckillId = 1000L;
+        long phone = 15812345678L;
+        Exposer exposer = seckillService.exportSeckillUrl(seckillId);
+        if (exposer.isExposed()) {
+            String md5 = exposer.getMd5();
+            SeckillExecution execution = seckillService.executeSeckillByProcedure(seckillId, phone, md5);
+            logger.info(execution.getStateInfo());
         }
     }
 

@@ -56,18 +56,4 @@
         )
     </select>
 
-    <!--todo-->
-    <!--List<Seckill> queryByEntity(Seckill seckill);-->
-    <select id="queryByEntity" resultType="Seckill">
-        SELECT
-            seckill_id,
-            name,
-            number,
-            start_time,
-            end_time,
-            create_time
-        FROM seckill
-        ORDER BY create_time DESC
-        limit #{offset}, #{limit}
-    </select>
 </mapper>
