@@ -43,7 +43,7 @@ public class SeckillServiceImpl implements SeckillService {
     private RedisDao redisDao;
 
     // MD5盐值字符串，用于混淆MD5
-    private final String slat = "xionggaoxiong2018";
+    private final String slat = "www.gabear.xyz";
     private Seckill seckill;
 
     @Override
@@ -66,7 +66,7 @@ public class SeckillServiceImpl implements SeckillService {
          */
         // 1.访问redis
         Seckill seckill = redisDao.getSeckill(seckillId);
-        if (seckill != null) {
+        if (seckill == null) {
             // 2.访问数据库
             seckill = seckillDao.queryById(seckillId);
             if (seckill == null) {

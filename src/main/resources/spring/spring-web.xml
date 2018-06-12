@@ -11,7 +11,7 @@
         http://www.springframework.org/schema/context/spring-context.xsd">
     <!--配置SpringMVC-->
     <!--1.开启SpringMVC注解模式
-            (1)自动注册DefaultAnnotationHandlerMapping,AnnotationMethodHandlerAdpter
+            (1)自动注册DefaultAnnotationHandlerMapping,AnnotationMethodHandlerAdapter
             (2)提供一系列功能：数据绑定，数字和日期的format @NumberFormat,@DateTimeFormat,xml/json默认读写支持
     -->
     <mvc:annotation-driven/>
@@ -32,8 +32,8 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
-    <!--4.扫描web相关的bean-->
-    <context:component-scan base-package="xyz.gabear.web"/>
+    <!--4.扫描web相关的Controller-->
+    <context:component-scan base-package="xyz.gabear.controller"/>
 
     <!--json默认是支持的，所以不用配置-->
 </beans>
