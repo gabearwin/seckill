@@ -5,6 +5,8 @@
 
 Java高并发秒杀案例，强烈推荐该课程！！！
 
+学习知识点：maven、SSM框架整合、dto、exception、enums、js模块化、redis、MySQL存储过程
+
 -----
 
 ### 高并发笔记：
@@ -22,13 +24,14 @@ Java高并发秒杀案例，强烈推荐该课程！！！
 
 - 秒杀操作不适合缓存，需要事务控制
 
-![image](./picture/problem1.jpg)
+![image](./picture/problem1.png)
 
-![image](./picture/problem2.jpg)
+![image](./picture/problem2.png)
 
 ### 解决方案
 - 大公司解决方案，成本很高
-![image](./picture/解决方案.jpg)
+
+![image](./picture/解决方案.png)
 
 - 基于我们自己的分析得到的解决方案
   - 把客户端逻辑放到MySQL服务端，避免网络延迟和GC的影响。
@@ -36,3 +39,7 @@ Java高并发秒杀案例，强烈推荐该课程！！！
     - 定制SQL方案，修改MySQL源码。`update/*+[auto_commit]*/`
     - 使用存储过程，整个事物在MySQL端完成
   - 优化方向：因为行级锁在Commit之后释放，所以应减少行级锁持有时间
+  
+- 编码实现
+  - redis应用
+  - 使用存储过程
